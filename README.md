@@ -7,3 +7,4 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=GypsyJR777_java-project-71&metric=coverage)](https://sonarcloud.io/summary/new_code?id=GypsyJR777_java-project-71)
 
 [![asciicast](https://asciinema.org/a/tcHtGkU9xSAgcnv0.svg)](https://asciinema.org/a/tcHtGkU9xSAgcnv0)
+[![asciicast](https://asciinema.org/a/L6IVFosRWKb88WpL.svg)](https://asciinema.org/a/L6IVFosRWKb88WpL)
