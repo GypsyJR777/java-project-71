@@ -1,6 +1,7 @@
 plugins {
     application
     checkstyle
+    jacoco
     id("org.sonarqube") version "7.1.0.6387"
 }
 
@@ -31,11 +32,28 @@ dependencies {
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.test {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
 }
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+
+//tasks.withType<Checkstyle>().configureEach {
+//    reports {
+//        xml.required.set(true)
+//        html.required.set(true)
+//    }
+//}
 
 application {
     mainClass = "hexlet.code.App"
@@ -51,5 +69,9 @@ sonar {
     properties {
         property("sonar.projectKey", "GypsyJR777_java-project-71")
         property("sonar.organization", "gypsyjr777")
+        property(
+            "sonar.coverage.jacoco.xmlReportPaths",
+            layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml").get().asFile.path,
+        )
     }
 }
