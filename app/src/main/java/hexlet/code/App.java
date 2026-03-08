@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import java.util.concurrent.Callable;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -11,7 +12,7 @@ import picocli.CommandLine.Parameters;
     version = "gendiff 1.0",
     description = "Compares two configuration files and shows a difference."
 )
-public class App implements Runnable {
+public class App implements Callable<Integer> {
     @Option(
         names = {"-f", "--format"},
         paramLabel = "format",
@@ -27,11 +28,22 @@ public class App implements Runnable {
     private String filepath2;
 
     public static void main(String[] args) {
-        var exitCode = new CommandLine(new App()).execute(args);
+        int exitCode;
+        try {
+            exitCode = new CommandLine(new App()).execute(args);
+        } catch (final Exception e) {
+            exitCode = 123;
+            e.printStackTrace();
+        }
         System.exit(exitCode);
     }
 
     @Override
-    public void run() {
+    public Integer call() throws Exception {
+        String diff = Differ.generate(filepath1, filepath2);
+        if (!diff.isEmpty()) {
+            System.out.println(diff);
+        }
+        return 0;
     }
 }
