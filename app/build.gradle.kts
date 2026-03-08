@@ -28,6 +28,7 @@ repositories {
 
 dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.21.1")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.1")
     implementation("info.picocli:picocli:4.7.7")
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
@@ -47,13 +48,6 @@ tasks.jacocoTestReport {
         html.required.set(true)
     }
 }
-
-//tasks.withType<Checkstyle>().configureEach {
-//    reports {
-//        xml.required.set(true)
-//        html.required.set(true)
-//    }
-//}
 
 application {
     mainClass = "hexlet.code.App"
