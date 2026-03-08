@@ -1,5 +1,7 @@
 plugins {
     application
+    checkstyle
+    id("org.sonarqube") version "7.1.0.6387"
 }
 
 group = "hexlet.code"
@@ -42,5 +44,12 @@ application {
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(25))
+    }
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "GypsyJR777_java-project-71")
+        property("sonar.organization", "gypsyjr777")
     }
 }
