@@ -12,7 +12,9 @@ import picocli.CommandLine.Parameters;
     version = "gendiff 1.0",
     description = "Compares two configuration files and shows a difference."
 )
-public class App implements Callable<Integer> {
+public final class App implements Callable<Integer> {
+    private static final int EXIT_CODE_ERROR = 123;
+
     @Option(
         names = {"-f", "--format"},
         paramLabel = "format",
@@ -32,7 +34,7 @@ public class App implements Callable<Integer> {
         try {
             exitCode = new CommandLine(new App()).execute(args);
         } catch (final Exception e) {
-            exitCode = 123;
+            exitCode = EXIT_CODE_ERROR;
             e.printStackTrace();
         }
         System.exit(exitCode);

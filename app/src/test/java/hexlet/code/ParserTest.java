@@ -7,6 +7,9 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class ParserTest {
+    private static final int FIRST_TIMEOUT = 50;
+    private static final int SECOND_TIMEOUT = 20;
+
     @Test
     void shouldParseJsonByRelativePath() throws Exception {
         Map<String, Object> actual = Parser.parse("src/test/resources/fixtures/file1.json");
@@ -39,7 +42,7 @@ class ParserTest {
     private Map<String, Object> getFirstFileData() {
         return Map.of(
             "host", "hexlet.io",
-            "timeout", 50,
+            "timeout", FIRST_TIMEOUT,
             "proxy", "123.234.53.22",
             "follow", false
         );
@@ -47,7 +50,7 @@ class ParserTest {
 
     private Map<String, Object> getSecondFileData() {
         return Map.of(
-            "timeout", 20,
+            "timeout", SECOND_TIMEOUT,
             "verbose", true,
             "host", "hexlet.io"
         );
