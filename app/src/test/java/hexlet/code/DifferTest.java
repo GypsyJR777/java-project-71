@@ -3,10 +3,13 @@ package hexlet.code;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 class DifferTest {
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
     @Test
     void shouldBuildStylishDiffForNestedJsonFiles() throws Exception {
         String actual = Differ.generate(
@@ -77,6 +80,28 @@ class DifferTest {
         assertEquals(getExpectedPlainDiff(), actual);
     }
 
+    @Test
+    void shouldBuildJsonDiffForNestedJsonFiles() throws Exception {
+        String actual = Differ.generate(
+            "src/test/resources/fixtures/file1_nested.json",
+            "src/test/resources/fixtures/file2_nested.json",
+            "json"
+        );
+
+        assertEquals(OBJECT_MAPPER.readTree(getExpectedJsonDiff()), OBJECT_MAPPER.readTree(actual));
+    }
+
+    @Test
+    void shouldBuildJsonDiffForNestedYmlFiles() throws Exception {
+        String actual = Differ.generate(
+            "src/test/resources/fixtures/file1_nested.yml",
+            "src/test/resources/fixtures/file2_nested.yml",
+            "json"
+        );
+
+        assertEquals(OBJECT_MAPPER.readTree(getExpectedJsonDiff()), OBJECT_MAPPER.readTree(actual));
+    }
+
     private String getExpectedDiff() {
         return """
             {
@@ -121,5 +146,104 @@ class DifferTest {
             Property 'setting1' was updated. From 'Some value' to 'Another value'
             Property 'setting2' was updated. From 200 to 300
             Property 'setting3' was updated. From true to 'none'""";
+    }
+
+    private String getExpectedJsonDiff() {
+        return """
+            [
+              {
+                "key" : "chars1",
+                "status" : "UNCHANGED",
+                "oldValue" : [ "a", "b", "c" ],
+                "newValue" : [ "a", "b", "c" ]
+              },
+              {
+                "key" : "chars2",
+                "status" : "UPDATED",
+                "oldValue" : [ "d", "e", "f" ],
+                "newValue" : false
+              },
+              {
+                "key" : "checked",
+                "status" : "UPDATED",
+                "oldValue" : false,
+                "newValue" : true
+              },
+              {
+                "key" : "default",
+                "status" : "UPDATED",
+                "oldValue" : null,
+                "newValue" : [ "value1", "value2" ]
+              },
+              {
+                "key" : "id",
+                "status" : "UPDATED",
+                "oldValue" : 45,
+                "newValue" : null
+              },
+              {
+                "key" : "key1",
+                "status" : "REMOVED",
+                "oldValue" : "value1",
+                "newValue" : null
+              },
+              {
+                "key" : "key2",
+                "status" : "ADDED",
+                "oldValue" : null,
+                "newValue" : "value2"
+              },
+              {
+                "key" : "numbers1",
+                "status" : "UNCHANGED",
+                "oldValue" : [ 1, 2, 3, 4 ],
+                "newValue" : [ 1, 2, 3, 4 ]
+              },
+              {
+                "key" : "numbers2",
+                "status" : "UPDATED",
+                "oldValue" : [ 2, 3, 4, 5 ],
+                "newValue" : [ 22, 33, 44, 55 ]
+              },
+              {
+                "key" : "numbers3",
+                "status" : "REMOVED",
+                "oldValue" : [ 3, 4, 5 ],
+                "newValue" : null
+              },
+              {
+                "key" : "numbers4",
+                "status" : "ADDED",
+                "oldValue" : null,
+                "newValue" : [ 4, 5, 6 ]
+              },
+              {
+                "key" : "obj1",
+                "status" : "ADDED",
+                "oldValue" : null,
+                "newValue" : {
+                  "nestedKey" : "value",
+                  "isNested" : true
+                }
+              },
+              {
+                "key" : "setting1",
+                "status" : "UPDATED",
+                "oldValue" : "Some value",
+                "newValue" : "Another value"
+              },
+              {
+                "key" : "setting2",
+                "status" : "UPDATED",
+                "oldValue" : 200,
+                "newValue" : 300
+              },
+              {
+                "key" : "setting3",
+                "status" : "UPDATED",
+                "oldValue" : true,
+                "newValue" : "none"
+              }
+            ]""";
     }
 }
