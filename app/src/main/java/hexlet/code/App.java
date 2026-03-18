@@ -30,22 +30,20 @@ public final class App implements Callable<Integer> {
     private String filepath2;
 
     public static void main(String[] args) {
-        int exitCode;
-        try {
-            exitCode = new CommandLine(new App()).execute(args);
-        } catch (final Exception e) {
-            exitCode = EXIT_CODE_ERROR;
-            e.printStackTrace();
-        }
-        System.exit(exitCode);
+        System.exit(new CommandLine(new App()).execute(args));
     }
 
     @Override
-    public Integer call() throws Exception {
-        String diff = Differ.generate(filepath1, filepath2, format);
-        if (!diff.isEmpty()) {
-            System.out.println(diff);
+    public Integer call() {
+        try {
+            String diff = Differ.generate(filepath1, filepath2, format);
+            if (!diff.isEmpty()) {
+                System.out.println(diff);
+            }
+            return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return EXIT_CODE_ERROR;
         }
-        return 0;
     }
 }
